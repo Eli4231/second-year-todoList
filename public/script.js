@@ -1,2 +1,2 @@
 let title = document.getElementById('title');
-title.innerHTML = 'Hello World';
+title.innerHTML = "Hello World";

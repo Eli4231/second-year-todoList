@@ -1,16 +1,21 @@
 const express = require('express');
-const path = require('path');
 require('dotenv').config();
-const port = process.env.PORT ;
-const api = process.env.HOST ;
-const app = express();
-app.use(express.static(__dirname + '/public'));
 const db = require('./config/db_config');
 
+const host = process.env.HOST;
+const port = process.env.PORT ;
+const app = express();
+
+app.use(express.static(__dirname + '/public'));
+
+app.use(express.json());
+
+
 app.get('/', (req, res) => {
-    res.sendFile(path.join(__dirname, 'public', 'index.html'));
+    res.sendFile((__dirname, 'public/index.html'));
 });
+app.use('/users', require('./routes/users_R'));
 
 app.listen(port, () => {
-    console.log(`Server is running on port http://${api}:${port}`);
+    console.log(`Server is running on port http://${host}:${port}`);
 });
