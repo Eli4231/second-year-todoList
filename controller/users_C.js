@@ -1,4 +1,4 @@
-const{getAllUsersFromDB, getUserByIdFromDB} = require('../model/users_M');
+const{getAllUsersFromDB, getUserByIdFromDB, deleteUserFromDB} = require('../model/users_M');
 
 
 
@@ -41,4 +41,4 @@ async function deleteUser(req, res){
         res.status(500).json({message: "error"});
     }
 }
-module.exports = {getAllUsers, getUserById};
+module.exports = {getAllUsers, getUserById, deleteUser};

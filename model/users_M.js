@@ -29,4 +29,4 @@ async function deleteUserFromDB(id){
     return rows;
 }
 
-module.exports = {getAllUsersFromDB, getUserByIdFromDB};
+module.exports = {getAllUsersFromDB, getUserByIdFromDB, deleteUserFromDB};
