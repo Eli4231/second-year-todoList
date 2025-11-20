@@ -23,13 +23,22 @@ async function getUserById(req, res){
     try {
         const users = await getUserByIdFromDB(req.params.id);
         if(!users || users.length === 0){
-            res.status(404).json({message: "user not found"});
+            res.status(404).json({message: `user id ${req.params.id} not found`});
             return;
         }
-        res.status(200).json({message: "ok", user: users[0]});
+        const user = users[0];
+        res.status(200).json({message: "ok", user});
     } catch (error) {
         res.status(500).json({message: "error"});
     }
 }
 
+async function deleteUser(req, res){
+    try {
+        const users = await deleteUserFromDB(req.params.id);
+        res.status(200).json({message: "user deleted successfully"});
+    } catch (error) {
+        res.status(500).json({message: "error"});
+    }
+}
 module.exports = {getAllUsers, getUserById};

@@ -21,4 +21,12 @@ async function getUserByIdFromDB(id){
     return rows;
     
 }
+async function deleteUserFromDB(id){
+    const sql = 'DELETE FROM users WHERE id = ?';
+    console.log(sql);
+    let [rows] = await db.query(sql, [id]);
+    console.log(rows);
+    return rows;
+}
+
 module.exports = {getAllUsersFromDB, getUserByIdFromDB};
