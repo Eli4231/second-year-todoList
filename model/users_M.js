@@ -26,7 +26,30 @@ async function deleteUserFromDB(id){
     console.log(sql);
     let [rows] = await db.query(sql, [id]);
     console.log(rows);
-    return rows;
+    return rows.affectedRows;
 }
 
-module.exports = {getAllUsersFromDB, getUserByIdFromDB, deleteUserFromDB};
+async function updateUserFromDB(id, user){
+    const allowedFields = ['name', 'email'];
+    const fields = [];
+    const values = [];
+
+    allowedFields.forEach((field) => {
+        if (Object.prototype.hasOwnProperty.call(user, field)) {
+            fields.push(`${field} = ?`);
+            values.push(user[field]);
+        }
+    });
+
+    if (fields.length === 0) {
+        return 0;
+    }
+
+    const sql = `UPDATE users SET ${fields.join(', ')} WHERE id = ?`;
+    console.log(sql);
+    let [rows] = await db.query(sql, [...values, id]);
+    console.log(rows);
+    return rows.affectedRows;
+}
+
+module.exports = {getAllUsersFromDB, getUserByIdFromDB, deleteUserFromDB, updateUserFromDB};
