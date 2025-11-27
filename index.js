@@ -17,6 +17,8 @@ app.get('/', (req, res) => {
 });
 app.use('/users', require('./routes/users_R'));
 
+app.use('/auth', require('./routes/auth.R.js'));
+
 app.listen(port, () => {
     console.log(`Server is running on http://${host}:${port}`);
 });
