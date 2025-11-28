@@ -1,5 +1,6 @@
 const express = require('express');
 const path = require('path');
+const cookieParser = require('cookie-parser');
 require('dotenv').config();
 const db = require('./config/db_config');
 
@@ -17,6 +18,7 @@ app.get('/', (req, res) => {
 });
 app.use('/users', require('./routes/users_R'));
 
+app.use(cookieParser());
 app.use('/auth', require('./routes/auth.R.js'));
 
 app.listen(port, () => {

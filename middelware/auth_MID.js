@@ -1,5 +1,5 @@
 const bcrypt = require('bcrypt');
-const { getUserByEmail, getUserById } = require('../model/auth_M');
+const { getUserByUserName } = require('../model/auth_M');
 
 function valuesToRegister(req, res, next){
     let {name,email,userName,pass} = req.body;
@@ -22,26 +22,27 @@ async function encryptPassword(req, res, next){
 }
 
 function login(req, res, next){
-    let {email, pass, id} = req.body;
-    if(!pass || (!email && !id)){
-        return res.status(400).json({message: "email or id and password are required"});
+    const { userName, pass } = req.body;
+    if (!userName || !pass) {
+        return res.status(400).json({ message: "userName and password are required" });
     }
     next();
 }
 
 async function verifyCredentials(req, res, next){
     try {
-        const { email, id } = req.body;
-        const user = email
-            ? await getUserByEmail(email)
-            : await getUserById(parseInt(id, 10));
-        if(!user){
-            return res.status(401).json({message: "invalid credentials"});
+        const { userName } = req.body;
+
+        const user = await getUserByUserName(userName);
+        if (!user) {
+            return res.status(401).json({ message: "invalid credentials" });
         }
+
         const isMatch = await bcrypt.compare(req.body.pass, user.pass);
-        if(!isMatch){
-            return res.status(401).json({message: "invalid credentials"});
+        if (!isMatch) {
+            return res.status(401).json({ message: "invalid credentials" });
         }
+
         req.user = user;
         next();
     } catch (error) {
