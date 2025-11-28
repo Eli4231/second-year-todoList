@@ -1,3 +1,4 @@
+
 const db = require('../config/db_config');
 
 async function addUserToDB({ name, email, userName, pass }) {
@@ -24,5 +25,12 @@ async function getUserById(id) {
     return rows.length > 0 ? rows[0] : null;
 }
 
-module.exports = { addUserToDB, getUserByEmail, getUserById };
+async function getUserByUserName(userName) {
+    const sql = 'SELECT * FROM users WHERE useName = ?';
+    console.log(sql);
+    const [rows] = await db.query(sql, [userName]);
+    console.log(rows);
+    return rows.length > 0 ? rows[0] : null;
+}
 
+module.exports = { addUserToDB, getUserByEmail, getUserById, getUserByUserName };
