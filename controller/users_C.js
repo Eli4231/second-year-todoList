@@ -4,7 +4,7 @@ const{getAllUsersFromDB, getUserByIdFromDB, deleteUserFromDB, updateUserFromDB} 
 
 async function getAllUsers(req, res){
     try {
-       let users=await getAllUsersFromDB();
+       let users = await getAllUsersFromDB();
        if(users.length == 0){
         res.status(200).json({message: "no users found"});
        }else{
@@ -12,10 +12,9 @@ async function getAllUsers(req, res){
        }
 
     } catch (error) {
-        res.status(500).json({message: "error"});
+        console.log('ERROR in getAllUsers:', error.message);
+        res.status(500).json({message: "error", details: error.message});
     }
-   
-   
 }
 
 
@@ -30,7 +29,8 @@ async function getUserById(req, res){
         const user = users[0];
         res.status(200).json({message: "ok", user});
     } catch (error) {
-        res.status(500).json({message: "error"});
+        console.log('ERROR in getUserById:', error.message);
+        res.status(500).json({message: "error", details: error.message});
     }
 }
 
@@ -43,7 +43,8 @@ async function deleteUser(req, res){
         }
         res.status(200).json({message: "user deleted successfully"});
     } catch (error) {
-        res.status(500).json({message: "error"});
+        console.log('ERROR in deleteUser:', error.message);
+        res.status(500).json({message: "error", details: error.message});
     }
 }
 async function updateUser(req, res){
@@ -55,7 +56,8 @@ async function updateUser(req, res){
         }
         res.status(200).json({message: "user updated successfully"});
     } catch (error) {
-        res.status(500).json({message: "error"});
+        console.log('ERROR in updateUser:', error.message);
+        res.status(500).json({message: "error", details: error.message});
     }
 }
 

@@ -11,14 +11,13 @@ const app = express();
 app.use(express.static(__dirname + '/public'));
 
 app.use(express.json());
-
+app.use(cookieParser());
 
 app.get('/', (req, res) => {
     res.sendFile(path.join(__dirname, 'public/index.html'));
 });
 app.use('/users', require('./routes/users_R'));
-
-app.use(cookieParser());
+app.use('/categories', require('./routes/categories_R'));
 app.use('/auth', require('./routes/auth.R.js'));
 
 app.listen(port, () => {
