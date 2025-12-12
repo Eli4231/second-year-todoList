@@ -5,10 +5,10 @@ const { isValidId, valuesToUpdate } = require('../middelware/users_MID');
 const { isLoggedIn } = require('../middelware/auth_MID');
 
 
-router.get('/', getAllUsers);
-router.get('/:id', isValidId, getUserById);
-router.delete('/:id', isValidId, deleteUser);
-router.patch('/:id', isValidId, valuesToUpdate, updateUser);
+router.get('/', isLoggedIn, getAllUsers);
+router.get('/:id', isLoggedIn, isValidId, getUserById);
+router.delete('/:id', isLoggedIn, isValidId, deleteUser);
+router.patch('/:id', isLoggedIn, isValidId, valuesToUpdate, updateUser);
 
 
 
