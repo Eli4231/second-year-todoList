@@ -8,5 +8,5 @@ router.get('/', isLoggedIn, categoriesC.getAllCategories);
 router.get('/:id', isLoggedIn, categoriesC.getCategoryById);
 router.post('/', isLoggedIn, validateCategory, categoriesC.addCategory);
 router.delete('/:id', isLoggedIn, categoriesC.deleteCategory);
-
+router.patch('/:id', isLoggedIn, validateCategory, categoriesC.updateCategory);
 module.exports = router;

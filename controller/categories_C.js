@@ -1,4 +1,4 @@
-const { getAllCategoriesFromDB, getCategoryByIdFromDB, deleteCategoryFromDB, addCategoryToDB } = require('../model/categories_M');
+const { getAllCategoriesFromDB, getCategoryByIdFromDB, deleteCategoryFromDB, addCategoryToDB, updateCategoryInDB } = require('../model/categories_M');
 
 async function getAllCategories(req, res) {
     try {
@@ -57,5 +57,29 @@ async function addCategory(req, res) {
         res.status(500).json({ message: "error", details: error.message });
     }
 }
+async function updateCategory(req, res) {
+    try {
+        const user_id = req.user.id;
+        const id = req.params.id;
+        const name = req.body.name;
 
-module.exports = { getAllCategories, getCategoryById, deleteCategory, addCategory };
+        if (!name || name.trim() === '') {
+            res.status(400).json({ message: "name is required" });
+            return;
+        }
+
+        const affected = await updateCategoryInDB(id, user_id, name);
+
+        if (!affected) {
+            return res.status(404).json({ message: `category id ${id} not found or not owned by user` });
+        }
+
+        res.status(200).json({ message: "category updated successfully" });
+    } catch (error) {
+        console.log('ERROR in updateCategory:', error.message);
+        res.status(500).json({ message: "error", details: error.message });
+    }
+}
+
+
+module.exports = { getAllCategories, getCategoryById, deleteCategory, addCategory, updateCategory };

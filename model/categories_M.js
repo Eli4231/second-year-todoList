@@ -24,4 +24,11 @@ async function addCategoryToDB({ name, user_id }) {
     return { id: result.insertId, name, user_id };
 }
 
-module.exports = { getAllCategoriesFromDB, getCategoryByIdFromDB, deleteCategoryFromDB, addCategoryToDB };
+async function updateCategoryInDB(id, user_id, name ) {
+    const sql = 'UPDATE categories SET name = ? WHERE id = ? AND user_id = ?';
+    const [rows] = await db.query(sql, [name, id, user_id]);
+    return rows.affectedRows; 
+}
+module.exports = { getAllCategoriesFromDB, getCategoryByIdFromDB, deleteCategoryFromDB, addCategoryToDB, updateCategoryInDB };
+
+
