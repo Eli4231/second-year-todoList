@@ -1,0 +1,539 @@
+{
+  "_type": "export",
+  "__export_format": 4,
+  "__export_date": "2024-01-01T00:00:00.000Z",
+  "__export_source": "insomnia.desktop.app:v2024.0.0",
+  "resources": [
+    {
+      "_id": "req_register_user",
+      "parentId": "fld_users_collection",
+      "modified": 1704067200000,
+      "created": 1704067200000,
+      "url": "http://localhost:3000/auth/register",
+      "name": "1. Register User",
+      "description": "הוסף משתמש חדש למסד הנתונים",
+      "method": "POST",
+      "body": {
+        "mimeType": "application/json",
+        "text": "{\n  \"name\": \"יוסי כהן\",\n  \"email\": \"yossi@example.com\",\n  \"userName\": \"yossi123\",\n  \"pass\": \"password123\"\n}"
+      },
+      "parameters": [],
+      "headers": [
+        {
+          "name": "Content-Type",
+          "value": "application/json"
+        }
+      ],
+      "authentication": {},
+      "metaSortKey": -1704067200000,
+      "isPrivate": false,
+      "settingStoreCookies": true,
+      "settingSendCookies": true,
+      "settingDisableRenderRequestBody": false,
+      "settingEncodeUrl": true,
+      "settingRebuildPath": true,
+      "settingFollowRedirects": "global",
+      "_type": "request"
+    },
+    {
+      "_id": "req_login_user",
+      "parentId": "fld_users_collection",
+      "modified": 1704067200000,
+      "created": 1704067200000,
+      "url": "http://localhost:3000/auth/login",
+      "name": "2. Login User",
+      "description": "התחבר עם משתמש קיים לקבלת JWT token",
+      "method": "POST",
+      "body": {
+        "mimeType": "application/json",
+        "text": "{\n  \"userName\": \"yossi123\",\n  \"pass\": \"password123\"\n}"
+      },
+      "parameters": [],
+      "headers": [
+        {
+          "name": "Content-Type",
+          "value": "application/json"
+        }
+      ],
+      "authentication": {},
+      "metaSortKey": -1704067200001,
+      "isPrivate": false,
+      "settingStoreCookies": true,
+      "settingSendCookies": true,
+      "settingDisableRenderRequestBody": false,
+      "settingEncodeUrl": true,
+      "settingRebuildPath": true,
+      "settingFollowRedirects": "global",
+      "_type": "request"
+    },
+    {
+      "_id": "req_get_all_users",
+      "parentId": "fld_users_collection",
+      "modified": 1704067200000,
+      "created": 1704067200000,
+      "url": "http://localhost:3000/users",
+      "name": "3. Get All Users",
+      "description": "קבל את כל המשתמשים (דורש authentication)",
+      "method": "GET",
+      "body": {},
+      "parameters": [],
+      "headers": [
+        {
+          "name": "Authorization",
+          "value": "Bearer {{ jwt_token }}",
+          "id": "pair_auth_header"
+        }
+      ],
+      "authentication": {},
+      "metaSortKey": -1704067200002,
+      "isPrivate": false,
+      "settingStoreCookies": true,
+      "settingSendCookies": true,
+      "settingDisableRenderRequestBody": false,
+      "settingEncodeUrl": true,
+      "settingRebuildPath": true,
+      "settingFollowRedirects": "global",
+      "_type": "request"
+    },
+    {
+      "_id": "req_get_user_by_id",
+      "parentId": "fld_users_collection",
+      "modified": 1704067200000,
+      "created": 1704067200000,
+      "url": "http://localhost:3000/users/1",
+      "name": "4. Get User By ID",
+      "description": "קבל משתמש לפי ID (דורש authentication)",
+      "method": "GET",
+      "body": {},
+      "parameters": [],
+      "headers": [
+        {
+          "name": "Authorization",
+          "value": "Bearer {{ jwt_token }}",
+          "id": "pair_auth_header"
+        }
+      ],
+      "authentication": {},
+      "metaSortKey": -1704067200003,
+      "isPrivate": false,
+      "settingStoreCookies": true,
+      "settingSendCookies": true,
+      "settingDisableRenderRequestBody": false,
+      "settingEncodeUrl": true,
+      "settingRebuildPath": true,
+      "settingFollowRedirects": "global",
+      "_type": "request"
+    },
+    {
+      "_id": "req_update_user",
+      "parentId": "fld_users_collection",
+      "modified": 1704067200000,
+      "created": 1704067200000,
+      "url": "http://localhost:3000/users/1",
+      "name": "5. Update User",
+      "description": "עדכן פרטי משתמש (דורש authentication) - אפשר לעדכן: name, email",
+      "method": "PATCH",
+      "body": {
+        "mimeType": "application/json",
+        "text": "{\n  \"name\": \"יוסי כהן מעודכן\",\n  \"email\": \"yossi.updated@example.com\"\n}"
+      },
+      "parameters": [],
+      "headers": [
+        {
+          "name": "Content-Type",
+          "value": "application/json"
+        },
+        {
+          "name": "Authorization",
+          "value": "Bearer {{ jwt_token }}",
+          "id": "pair_auth_header"
+        }
+      ],
+      "authentication": {},
+      "metaSortKey": -1704067200004,
+      "isPrivate": false,
+      "settingStoreCookies": true,
+      "settingSendCookies": true,
+      "settingDisableRenderRequestBody": false,
+      "settingEncodeUrl": true,
+      "settingRebuildPath": true,
+      "settingFollowRedirects": "global",
+      "_type": "request"
+    },
+    {
+      "_id": "req_delete_user",
+      "parentId": "fld_users_collection",
+      "modified": 1704067200000,
+      "created": 1704067200000,
+      "url": "http://localhost:3000/users/1",
+      "name": "6. Delete User",
+      "description": "מחק משתמש (דורש authentication)",
+      "method": "DELETE",
+      "body": {},
+      "parameters": [],
+      "headers": [
+        {
+          "name": "Authorization",
+          "value": "Bearer {{ jwt_token }}",
+          "id": "pair_auth_header"
+        }
+      ],
+      "authentication": {},
+      "metaSortKey": -1704067200005,
+      "isPrivate": false,
+      "settingStoreCookies": true,
+      "settingSendCookies": true,
+      "settingDisableRenderRequestBody": false,
+      "settingEncodeUrl": true,
+      "settingRebuildPath": true,
+      "settingFollowRedirects": "global",
+      "_type": "request"
+    },
+    {
+      "_id": "env_base",
+      "parentId": "env_base",
+      "modified": 1704067200000,
+      "created": 1704067200000,
+      "name": "Base Environment",
+      "data": {
+        "base_url": "http://localhost:3000",
+        "jwt_token": ""
+      },
+      "dataPropertyOrder": {
+        "&": ["base_url", "jwt_token"]
+      },
+      "color": null,
+      "isPrivate": false,
+      "metaSortKey": 1704067200000,
+      "_type": "environment"
+    },
+    {
+      "_id": "req_add_category",
+      "parentId": "fld_categories_collection",
+      "modified": 1704067300000,
+      "created": 1704067300000,
+      "url": "http://localhost:3000/categories",
+      "name": "1. Add Category",
+      "description": "הוסף קטגוריה חדשה (דורש authentication)",
+      "method": "POST",
+      "body": {
+        "mimeType": "application/json",
+        "text": "{\n  \"name\": \"עבודה\"\n}"
+      },
+      "parameters": [],
+      "headers": [
+        {
+          "name": "Content-Type",
+          "value": "application/json"
+        },
+        {
+          "name": "Authorization",
+          "value": "Bearer {{ jwt_token }}",
+          "id": "pair_auth_header"
+        }
+      ],
+      "authentication": {},
+      "metaSortKey": -1704067300000,
+      "isPrivate": false,
+      "settingStoreCookies": true,
+      "settingSendCookies": true,
+      "settingDisableRenderRequestBody": false,
+      "settingEncodeUrl": true,
+      "settingRebuildPath": true,
+      "settingFollowRedirects": "global",
+      "_type": "request"
+    },
+    {
+      "_id": "req_get_all_categories",
+      "parentId": "fld_categories_collection",
+      "modified": 1704067300000,
+      "created": 1704067300000,
+      "url": "http://localhost:3000/categories",
+      "name": "2. Get All Categories",
+      "description": "קבל את כל הקטגוריות של המשתמש המחובר (דורש authentication)",
+      "method": "GET",
+      "body": {},
+      "parameters": [],
+      "headers": [
+        {
+          "name": "Authorization",
+          "value": "Bearer {{ jwt_token }}",
+          "id": "pair_auth_header"
+        }
+      ],
+      "authentication": {},
+      "metaSortKey": -1704067300001,
+      "isPrivate": false,
+      "settingStoreCookies": true,
+      "settingSendCookies": true,
+      "settingDisableRenderRequestBody": false,
+      "settingEncodeUrl": true,
+      "settingRebuildPath": true,
+      "settingFollowRedirects": "global",
+      "_type": "request"
+    },
+    {
+      "_id": "req_get_category_by_id",
+      "parentId": "fld_categories_collection",
+      "modified": 1704067300000,
+      "created": 1704067300000,
+      "url": "http://localhost:3000/categories/1",
+      "name": "3. Get Category By ID",
+      "description": "קבל קטגוריה לפי ID (דורש authentication)",
+      "method": "GET",
+      "body": {},
+      "parameters": [],
+      "headers": [
+        {
+          "name": "Authorization",
+          "value": "Bearer {{ jwt_token }}",
+          "id": "pair_auth_header"
+        }
+      ],
+      "authentication": {},
+      "metaSortKey": -1704067300002,
+      "isPrivate": false,
+      "settingStoreCookies": true,
+      "settingSendCookies": true,
+      "settingDisableRenderRequestBody": false,
+      "settingEncodeUrl": true,
+      "settingRebuildPath": true,
+      "settingFollowRedirects": "global",
+      "_type": "request"
+    },
+    {
+      "_id": "req_update_category",
+      "parentId": "fld_categories_collection",
+      "modified": 1704067300000,
+      "created": 1704067300000,
+      "url": "http://localhost:3000/categories/1",
+      "name": "4. Update Category",
+      "description": "עדכן שם קטגוריה (דורש authentication)",
+      "method": "PATCH",
+      "body": {
+        "mimeType": "application/json",
+        "text": "{\n  \"name\": \"עבודה - מעודכן\"\n}"
+      },
+      "parameters": [],
+      "headers": [
+        {
+          "name": "Content-Type",
+          "value": "application/json"
+        },
+        {
+          "name": "Authorization",
+          "value": "Bearer {{ jwt_token }}",
+          "id": "pair_auth_header"
+        }
+      ],
+      "authentication": {},
+      "metaSortKey": -1704067300003,
+      "isPrivate": false,
+      "settingStoreCookies": true,
+      "settingSendCookies": true,
+      "settingDisableRenderRequestBody": false,
+      "settingEncodeUrl": true,
+      "settingRebuildPath": true,
+      "settingFollowRedirects": "global",
+      "_type": "request"
+    },
+    {
+      "_id": "req_delete_category",
+      "parentId": "fld_categories_collection",
+      "modified": 1704067300000,
+      "created": 1704067300000,
+      "url": "http://localhost:3000/categories/1",
+      "name": "5. Delete Category",
+      "description": "מחק קטגוריה (דורש authentication)",
+      "method": "DELETE",
+      "body": {},
+      "parameters": [],
+      "headers": [
+        {
+          "name": "Authorization",
+          "value": "Bearer {{ jwt_token }}",
+          "id": "pair_auth_header"
+        }
+      ],
+      "authentication": {},
+      "metaSortKey": -1704067300004,
+      "isPrivate": false,
+      "settingStoreCookies": true,
+      "settingSendCookies": true,
+      "settingDisableRenderRequestBody": false,
+      "settingEncodeUrl": true,
+      "settingRebuildPath": true,
+      "settingFollowRedirects": "global",
+      "_type": "request"
+    },
+    {
+      "_id": "req_add_task",
+      "parentId": "fld_tasks_collection",
+      "modified": 1704067400000,
+      "created": 1704067400000,
+      "url": "http://localhost:3000/tasks",
+      "name": "1. Add Task",
+      "description": "הוסף משימה חדשה (דורש authentication)",
+      "method": "POST",
+      "body": {
+        "mimeType": "application/json",
+        "text": "{\n  \"description\": \"לסיים את הפרויקט\",\n  \"isDone\": 0,\n  \"category_id\": 1\n}"
+      },
+      "parameters": [],
+      "headers": [
+        {
+          "name": "Content-Type",
+          "value": "application/json"
+        },
+        {
+          "name": "Authorization",
+          "value": "Bearer {{ jwt_token }}",
+          "id": "pair_auth_header"
+        }
+      ],
+      "authentication": {},
+      "metaSortKey": -1704067400000,
+      "isPrivate": false,
+      "settingStoreCookies": true,
+      "settingSendCookies": true,
+      "settingDisableRenderRequestBody": false,
+      "settingEncodeUrl": true,
+      "settingRebuildPath": true,
+      "settingFollowRedirects": "global",
+      "_type": "request"
+    },
+    {
+      "_id": "req_get_all_tasks",
+      "parentId": "fld_tasks_collection",
+      "modified": 1704067400000,
+      "created": 1704067400000,
+      "url": "http://localhost:3000/tasks",
+      "name": "2. Get All Tasks",
+      "description": "קבל את כל המשימות של המשתמש המחובר (דורש authentication)",
+      "method": "GET",
+      "body": {},
+      "parameters": [],
+      "headers": [
+        {
+          "name": "Authorization",
+          "value": "Bearer {{ jwt_token }}",
+          "id": "pair_auth_header"
+        }
+      ],
+      "authentication": {},
+      "metaSortKey": -1704067400001,
+      "isPrivate": false,
+      "settingStoreCookies": true,
+      "settingSendCookies": true,
+      "settingDisableRenderRequestBody": false,
+      "settingEncodeUrl": true,
+      "settingRebuildPath": true,
+      "settingFollowRedirects": "global",
+      "_type": "request"
+    },
+    {
+      "_id": "req_get_task_by_id",
+      "parentId": "fld_tasks_collection",
+      "modified": 1704067400000,
+      "created": 1704067400000,
+      "url": "http://localhost:3000/tasks/1",
+      "name": "3. Get Task By ID",
+      "description": "קבל משימה לפי ID (דורש authentication)",
+      "method": "GET",
+      "body": {},
+      "parameters": [],
+      "headers": [
+        {
+          "name": "Authorization",
+          "value": "Bearer {{ jwt_token }}",
+          "id": "pair_auth_header"
+        }
+      ],
+      "authentication": {},
+      "metaSortKey": -1704067400002,
+      "isPrivate": false,
+      "settingStoreCookies": true,
+      "settingSendCookies": true,
+      "settingDisableRenderRequestBody": false,
+      "settingEncodeUrl": true,
+      "settingRebuildPath": true,
+      "settingFollowRedirects": "global",
+      "_type": "request"
+    },
+    {
+      "_id": "req_delete_task",
+      "parentId": "fld_tasks_collection",
+      "modified": 1704067400000,
+      "created": 1704067400000,
+      "url": "http://localhost:3000/tasks/1",
+      "name": "4. Delete Task",
+      "description": "מחק משימה (דורש authentication)",
+      "method": "DELETE",
+      "body": {},
+      "parameters": [],
+      "headers": [
+        {
+          "name": "Authorization",
+          "value": "Bearer {{ jwt_token }}",
+          "id": "pair_auth_header"
+        }
+      ],
+      "authentication": {},
+      "metaSortKey": -1704067400003,
+      "isPrivate": false,
+      "settingStoreCookies": true,
+      "settingSendCookies": true,
+      "settingDisableRenderRequestBody": false,
+      "settingEncodeUrl": true,
+      "settingRebuildPath": true,
+      "settingFollowRedirects": "global",
+      "_type": "request"
+    },
+    {
+      "_id": "fld_users_collection",
+      "parentId": "wrk_main",
+      "modified": 1704067200000,
+      "created": 1704067200000,
+      "name": "Users API",
+      "description": "אוסף בקשות לניהול משתמשים",
+      "environment": {},
+      "environmentPropertyOrder": null,
+      "metaSortKey": 1704067200000,
+      "_type": "request_group"
+    },
+    {
+      "_id": "fld_categories_collection",
+      "parentId": "wrk_main",
+      "modified": 1704067300000,
+      "created": 1704067300000,
+      "name": "Categories API",
+      "description": "אוסף בקשות לניהול קטגוריות",
+      "environment": {},
+      "environmentPropertyOrder": null,
+      "metaSortKey": 1704067300000,
+      "_type": "request_group"
+    },
+    {
+      "_id": "fld_tasks_collection",
+      "parentId": "wrk_main",
+      "modified": 1704067400000,
+      "created": 1704067400000,
+      "name": "Tasks API",
+      "description": "אוסף בקשות לניהול משימות",
+      "environment": {},
+      "environmentPropertyOrder": null,
+      "metaSortKey": 1704067400000,
+      "_type": "request_group"
+    },
+    {
+      "_id": "wrk_main",
+      "parentId": null,
+      "modified": 1704067200000,
+      "created": 1704067200000,
+      "name": "TodoList API",
+      "description": "אוסף בקשות לפרויקט TodoList",
+      "scope": "collection",
+      "_type": "workspace"
+    }
+  ]
+}

@@ -61,5 +61,24 @@ async function updateUser(req, res){
     }
 }
 
+async function getCurrentUser(req, res) {
+    try {
+        const userId = req.user.id;
+        const users = await getUserByIdFromDB(userId);
+       
+        if(!users || users.length === 0){
+            res.status(404).json({message: "user not found"});
+            return;
+        }
+        const user = users[0];
+        // Don't send password
+        const { pass, ...safeUser } = user;
+        res.status(200).json({message: "ok", user: safeUser});
+    } catch (error) {
+        console.log('ERROR in getCurrentUser:', error.message);
+        res.status(500).json({message: "error", details: error.message});
+    }
+}
 
-module.exports = {getAllUsers, getUserById, deleteUser, updateUser};
+
+module.exports = {getAllUsers, getUserById, deleteUser, updateUser, getCurrentUser};

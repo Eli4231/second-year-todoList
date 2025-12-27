@@ -1,4 +1,4 @@
-const {getAllTasksFromDB, getTaskByIdFromDB, addTaskToDB} = require('../model/tasks_M');
+const {getAllTasksFromDB, getTaskByIdFromDB, addTaskToDB, deleteTaskFromDB} = require('../model/tasks_M');
 
 async function addTask(req, res) {
     try {
@@ -40,5 +40,19 @@ async function getTaskById(req, res) {
     }
 }
 
+async function deleteTask(req, res) {
+    try {
+        const users_id = req.user.id;
+        const affectedRows = await deleteTaskFromDB(req.params.id, users_id);
+        if (affectedRows === 0 || !affectedRows) {
+            res.status(404).json({ message: `task id ${req.params.id} not found` });
+            return;
+        }
+        res.status(200).json({ message: "task deleted successfully" });
+    } catch (error) {
+        console.log('ERROR in deleteTask:', error.message);
+        res.status(500).json({ message: "error", details: error.message });
+    }
+}
 
-module.exports = { getAllTasks, getTaskById, addTask };
+module.exports = { getAllTasks, getTaskById, addTask, deleteTask };

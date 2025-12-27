@@ -13,7 +13,36 @@ async function addUser(req, res) {
             return res.status(400).json({ message: "userName already exists" });
         }
         const user = await addUserToDB(req.body);
-        res.status(200).json({ message: "user added successfully", user });
+        
+        // Get the full user object from database to create JWT
+        const fullUser = await getUserByUserName(req.body.userName);
+        const { pass, ...safeUser } = fullUser;
+
+        // Create JWT token for auto-login after registration
+        const payload = {
+            id: safeUser.id,
+            userName: safeUser.useName || safeUser.userName,
+            email: safeUser.email
+        };
+
+        const token = jwt.sign(
+            payload,
+            process.env.SECRET_KEY || 'dev_secret',
+            { expiresIn: '30m' }
+        );
+
+        res
+            .cookie('jwt', token, {
+                httpOnly: true,
+                secure: process.env.NODE_ENV === 'production',
+                maxAge: 30 * 60 * 1000 // 30 minutes
+            })
+            .status(200)
+            .json({ 
+                message: "user added successfully", 
+                token,
+                user: safeUser 
+            });
     } catch (error) {
         console.log("Error adding user:", error.message);
         res.status(500).json({ message: "error", details: error.message });
