@@ -8,7 +8,58 @@
 </head>
 <body>
     <div class="container home-container">
-        <h1 id="title"></h1>
+        <div class="header-section">
+            <h1 id="title"></h1>
+            <button class="logout-btn" onclick="logout()">התנתק</button>
+        </div>
+
+        <!-- Tasks Table -->
+        <div class="tasks-section">
+            <h2>המשימות שלי</h2>
+            <div id="tasksTableContainer">
+                <table id="tasksTable">
+                    <thead>
+                        <tr>
+                            <th>סטטוס</th>
+                            <th>תיאור המשימה</th>
+                            <th>קטגוריה</th>
+                            <th>פעולות</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tasksTableBody">
+                        <!-- Tasks will be inserted here by JavaScript -->
+                    </tbody>
+                </table>
+                <p id="noTasksMessage" class="no-tasks" style="display: none;">
+                    אין משימות עדיין. המשימות שלך יופיעו כאן.
+                </p>
+            </div>
+        </div>
+
+        <!-- Add Task Form -->
+        <div class="add-task-section">
+            <h2>הוסף משימה חדשה</h2>
+            <div class="form-group">
+                <label for="taskDescription">תיאור המשימה</label>
+                <input type="text" id="taskDescription" placeholder="הכנס תיאור המשימה">
+            </div>
+            <div class="form-group">
+                <label for="taskCategory">קטגוריה</label>
+                <select id="taskCategory">
+                    <option value="">בחר קטגוריה...</option>
+                </select>
+            </div>
+            <button onclick="addTask()">הוסף משימה</button>
+        </div>
+
+        <!-- Add Category Section -->
+        <div class="add-category-section">
+            <h3>הוסף קטגוריה חדשה</h3>
+            <div class="form-group inline-form">
+                <input type="text" id="categoryName" placeholder="שם הקטגוריה">
+                <button onclick="addCategory()">הוסף</button>
+            </div>
+        </div>
     </div>
     <script src="../scripts/script.js"></script>
 </body>

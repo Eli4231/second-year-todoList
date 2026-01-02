@@ -113,4 +113,20 @@ async function createJwt(req, res) {
     }
 }
 
-module.exports = { addUser, loginUser, createJwt };
+function logoutUser(req, res) {
+    try {
+        // Clear the JWT cookie
+        res.clearCookie('jwt', {
+            httpOnly: true,
+            secure: process.env.NODE_ENV === 'production',
+            path: '/'
+        });
+        
+        res.status(200).json({ message: "logged out successfully" });
+    } catch (error) {
+        console.log("Error logging out:", error.message);
+        res.status(500).json({ message: "error", details: error.message });
+    }
+}
+
+module.exports = { addUser, loginUser, createJwt, logoutUser };

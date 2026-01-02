@@ -8,6 +8,7 @@ const validateTask = require('../middelware/tasks_MID');
 router.get('/', isLoggedIn, tasksC.getAllTasks);
 router.get('/:id', isLoggedIn, tasksC.getTaskById);
 router.post('/', isLoggedIn, validateTask, tasksC.addTask);
+router.patch('/:id', isLoggedIn, tasksC.updateTask);
 router.delete('/:id', isLoggedIn, tasksC.deleteTask);
 
 module.exports = router;

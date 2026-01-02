@@ -1,7 +1,10 @@
+let categories = [];
+let tasks = [];
+
 async function loadUserGreeting() {
     try {
         let response = await fetch('/users/me', {
-            credentials: 'include' // Important: include cookies for JWT
+            credentials: 'include'
         });
         
         if (response.status === 200) {
@@ -9,12 +12,261 @@ async function loadUserGreeting() {
             let userName = data.user.name || data.user.useName || 'User';
             let title = document.getElementById('title');
             title.innerHTML = `שלום ${userName}`;
+            
+            // Load categories and tasks after user is loaded
+            await loadCategories();
+            await loadTasks();
         } else {
-            // If not logged in, redirect to login
             window.location.href = '/';
         }
     } catch (error) {
         console.error('Error loading user:', error);
+        window.location.href = '/';
+    }
+}
+
+async function loadCategories() {
+    try {
+        let response = await fetch('/categories', {
+            credentials: 'include'
+        });
+        
+        if (response.status === 200) {
+            let data = await response.json();
+            if (data.message === "no categories found") {
+                categories = [];
+            } else {
+                categories = data.categories || [];
+            }
+            populateCategorySelect();
+        }
+    } catch (error) {
+        console.error('Error loading categories:', error);
+    }
+}
+
+function populateCategorySelect() {
+    const select = document.getElementById('taskCategory');
+    select.innerHTML = '<option value="">בחר קטגוריה...</option>';
+    
+    categories.forEach(category => {
+        const option = document.createElement('option');
+        option.value = category.id;
+        option.textContent = category.name;
+        select.appendChild(option);
+    });
+}
+
+async function loadTasks() {
+    try {
+        let response = await fetch('/tasks', {
+            credentials: 'include'
+        });
+        
+        if (response.status === 200) {
+            let data = await response.json();
+            if (data.message === "no tasks found") {
+                tasks = [];
+            } else {
+                tasks = data.tasks || [];
+            }
+            displayTasksInTable();
+        }
+    } catch (error) {
+        console.error('Error loading tasks:', error);
+    }
+}
+
+function displayTasksInTable() {
+    const tbody = document.getElementById('tasksTableBody');
+    const noTasksMsg = document.getElementById('noTasksMessage');
+    const table = document.getElementById('tasksTable');
+    
+    tbody.innerHTML = '';
+
+    if (tasks.length === 0) {
+        table.style.display = 'none';
+        noTasksMsg.style.display = 'block';
+        return;
+    }
+
+    table.style.display = 'table';
+    noTasksMsg.style.display = 'none';
+
+    tasks.forEach(task => {
+        const row = document.createElement('tr');
+        row.className = task.isDone ? 'completed-task' : '';
+        
+        const category = categories.find(cat => cat.id === task.category_id);
+        const categoryName = category ? category.name : 'ללא קטגוריה';
+        
+        row.innerHTML = `
+            <td class="status-cell">
+                <input type="checkbox" ${task.isDone ? 'checked' : ''} 
+                       onchange="toggleTask(${task.id}, ${!task.isDone})"
+                       class="task-checkbox">
+            </td>
+            <td class="description-cell ${task.isDone ? 'completed-text' : ''}">
+                ${task.description}
+            </td>
+            <td class="category-cell">
+                <span class="category-badge">${categoryName}</span>
+            </td>
+            <td class="actions-cell">
+                <button class="delete-btn-small" onclick="deleteTask(${task.id})">מחק</button>
+            </td>
+        `;
+        
+        tbody.appendChild(row);
+    });
+}
+
+async function addTask() {
+    const description = document.getElementById('taskDescription').value;
+    const categoryId = document.getElementById('taskCategory').value;
+
+    if (!description.trim()) {
+        alert('אנא הכנס תיאור למשימה');
+        return;
+    }
+
+    if (!categoryId) {
+        alert('אנא בחר קטגוריה');
+        return;
+    }
+
+    try {
+        let response = await fetch('/tasks', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            credentials: 'include',
+            body: JSON.stringify({
+                description: description.trim(),
+                isDone: 0,
+                category_id: parseInt(categoryId)
+            })
+        });
+
+        let data = await response.json();
+        if (response.status === 200) {
+            document.getElementById('taskDescription').value = '';
+            await loadTasks();
+            alert('המשימה נוספה בהצלחה!');
+        } else {
+            alert(data.message || 'שגיאה בהוספת המשימה');
+        }
+    } catch (error) {
+        console.error('Error adding task:', error);
+        alert('שגיאה בהוספת המשימה');
+    }
+}
+
+async function toggleTask(taskId, isDone) {
+    try {
+        const task = tasks.find(t => t.id === taskId);
+        if (!task) return;
+
+        let response = await fetch(`/tasks/${taskId}`, {
+            method: 'PATCH',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            credentials: 'include',
+            body: JSON.stringify({
+                description: task.description,
+                isDone: isDone ? 1 : 0,
+                category_id: task.category_id
+            })
+        });
+
+        if (response.status === 200) {
+            await loadTasks();
+        } else {
+            alert('שגיאה בעדכון המשימה');
+            await loadTasks();
+        }
+    } catch (error) {
+        console.error('Error toggling task:', error);
+        alert('שגיאה בעדכון המשימה');
+        await loadTasks();
+    }
+}
+
+async function deleteTask(taskId) {
+    if (!confirm('האם אתה בטוח שברצונך למחוק את המשימה?')) {
+        return;
+    }
+
+    try {
+        let response = await fetch(`/tasks/${taskId}`, {
+            method: 'DELETE',
+            credentials: 'include'
+        });
+
+        if (response.status === 200) {
+            await loadTasks();
+            alert('המשימה נמחקה בהצלחה!');
+        } else {
+            alert('שגיאה במחיקת המשימה');
+        }
+    } catch (error) {
+        console.error('Error deleting task:', error);
+        alert('שגיאה במחיקת המשימה');
+    }
+}
+
+async function addCategory() {
+    const name = document.getElementById('categoryName').value;
+
+    if (!name.trim()) {
+        alert('אנא הכנס שם לקטגוריה');
+        return;
+    }
+
+    try {
+        let response = await fetch('/categories', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            credentials: 'include',
+            body: JSON.stringify({
+                name: name.trim()
+            })
+        });
+
+        let data = await response.json();
+        if (response.status === 200) {
+            document.getElementById('categoryName').value = '';
+            await loadCategories();
+            alert('הקטגוריה נוספה בהצלחה!');
+        } else {
+            alert(data.message || 'שגיאה בהוספת הקטגוריה');
+        }
+    } catch (error) {
+        console.error('Error adding category:', error);
+        alert('שגיאה בהוספת הקטגוריה');
+    }
+}
+
+async function logout() {
+    try {
+        let response = await fetch('/auth/logout', {
+            method: 'POST',
+            credentials: 'include'
+        });
+        
+        if (response.status === 200) {
+            window.location.href = '/';
+        } else {
+            document.cookie = 'jwt=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
+            window.location.href = '/';
+        }
+    } catch (error) {
+        console.error('Error logging out:', error);
+        document.cookie = 'jwt=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
         window.location.href = '/';
     }
 }

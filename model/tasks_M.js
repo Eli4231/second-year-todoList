@@ -24,4 +24,10 @@ async function deleteTaskFromDB(id, users_id) {
     return result.affectedRows;
 }
 
-module.exports = { getAllTasksFromDB, getTaskByIdFromDB, addTaskToDB, deleteTaskFromDB };
+async function updateTaskInDB(id, users_id, { description, isDone, category_id }) {
+    const sql = 'UPDATE tasks SET description = ?, isDone = ?, category_id = ? WHERE id = ? AND user_id = ?';
+    const [result] = await db.query(sql, [description, isDone, category_id, id, users_id]);
+    return result.affectedRows;
+}
+
+module.exports = { getAllTasksFromDB, getTaskByIdFromDB, addTaskToDB, deleteTaskFromDB, updateTaskInDB };
