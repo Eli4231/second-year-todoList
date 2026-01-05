@@ -16,6 +16,15 @@
         <!-- Tasks Table -->
         <div class="tasks-section">
             <h2>המשימות שלי</h2>
+            
+            <!-- Filter Section -->
+            <div class="filter-section">
+                <label for="filterCategory">סנן לפי קטגוריה:</label>
+                <select id="filterCategory" onchange="filterTasksByCategory(this.value)">
+                    <option value="">בחר קטגוריה...</option>
+                </select>
+            </div>
+            
             <div id="tasksTableContainer">
                 <table id="tasksTable">
                     <thead>

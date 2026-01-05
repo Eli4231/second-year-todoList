@@ -61,7 +61,7 @@ async function updateTask(req, res) {
         const taskId = req.params.id;
         const { description, isDone, category_id } = req.body;
 
-        // Get existing task to merge updates
+        // Get existing task to merge updates (OPTIMIZATION: only one DB query to get existing data)
         const existingTask = await getTaskByIdFromDB(taskId, users_id);
         if (!existingTask || existingTask.length === 0) {
             return res.status(404).json({ message: `task id ${taskId} not found` });
@@ -78,8 +78,16 @@ async function updateTask(req, res) {
             return res.status(404).json({ message: `task id ${taskId} not found` });
         }
 
-        const updatedTask = await getTaskByIdFromDB(taskId, users_id);
-        res.status(200).json({ message: "task updated successfully", task: updatedTask[0] });
+        // OPTIMIZATION: Return the updated data directly instead of querying DB again
+        // This saves one database query!
+        res.status(200).json({ 
+            message: "task updated successfully", 
+            task: {
+                id: parseInt(taskId),
+                user_id: users_id,
+                ...updates
+            }
+        });
     } catch (error) {
         console.log('ERROR in updateTask:', error.message);
         res.status(500).json({ message: "error", details: error.message });

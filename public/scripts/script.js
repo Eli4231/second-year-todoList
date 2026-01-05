@@ -1,5 +1,6 @@
 let categories = [];
 let tasks = [];
+let selectedCategoryId = null;
 
 async function loadUserGreeting() {
     try {
@@ -39,6 +40,7 @@ async function loadCategories() {
                 categories = data.categories || [];
             }
             populateCategorySelect();
+            populateFilterCategorySelect();
         }
     } catch (error) {
         console.error('Error loading categories:', error);
@@ -55,6 +57,24 @@ function populateCategorySelect() {
         option.textContent = category.name;
         select.appendChild(option);
     });
+}
+
+function populateFilterCategorySelect() {
+    const select = document.getElementById('filterCategory');
+    select.innerHTML = '<option value="">בחר קטגוריה...</option>';
+    
+    categories.forEach(category => {
+        const option = document.createElement('option');
+        option.value = category.id;
+        option.textContent = category.name;
+        select.appendChild(option);
+    });
+    
+    // Auto-select first category if available
+    if (categories.length > 0) {
+        selectedCategoryId = categories[0].id;
+        select.value = selectedCategoryId;
+    }
 }
 
 async function loadTasks() {
@@ -84,16 +104,26 @@ function displayTasksInTable() {
     
     tbody.innerHTML = '';
 
-    if (tasks.length === 0) {
+    // Filter tasks by selected category
+    const filteredTasks = selectedCategoryId 
+        ? tasks.filter(task => task.category_id == selectedCategoryId)
+        : tasks;
+
+    if (filteredTasks.length === 0) {
         table.style.display = 'none';
         noTasksMsg.style.display = 'block';
+        if (selectedCategoryId) {
+            noTasksMsg.textContent = 'אין משימות בקטגוריה זו.';
+        } else {
+            noTasksMsg.textContent = 'אין משימות עדיין. המשימות שלך יופיעו כאן.';
+        }
         return;
     }
 
     table.style.display = 'table';
     noTasksMsg.style.display = 'none';
 
-    tasks.forEach(task => {
+    filteredTasks.forEach(task => {
         const row = document.createElement('tr');
         row.className = task.isDone ? 'completed-task' : '';
         
@@ -249,6 +279,11 @@ async function addCategory() {
         console.error('Error adding category:', error);
         alert('שגיאה בהוספת הקטגוריה');
     }
+}
+
+function filterTasksByCategory(categoryId) {
+    selectedCategoryId = categoryId ? parseInt(categoryId) : null;
+    displayTasksInTable();
 }
 
 async function logout() {

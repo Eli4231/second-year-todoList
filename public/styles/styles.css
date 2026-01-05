@@ -177,6 +177,29 @@ a:hover {
     color: #333;
 }
 
+/* Filter Section */
+.filter-section {
+    margin-bottom: 20px;
+    padding: 15px 20px;
+    background: #f0f4ff;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.filter-section label {
+    font-weight: 600;
+    color: #555;
+    margin-bottom: 0;
+    white-space: nowrap;
+}
+
+.filter-section select {
+    flex: 1;
+    max-width: 300px;
+}
+
 #tasksTableContainer {
     background: white;
     border-radius: 15px;
