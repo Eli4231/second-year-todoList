@@ -293,10 +293,50 @@ a:hover {
     font-size: 0.85rem;
     cursor: pointer;
     transition: all 0.3s ease;
+    margin-left: 5px;
 }
 
 .delete-btn-small:hover {
     box-shadow: 0 4px 12px rgba(245, 87, 108, 0.4);
+    transform: translateY(-2px);
+}
+
+.edit-btn-small {
+    padding: 8px 16px;
+    background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 0.85rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.edit-btn-small:hover {
+    box-shadow: 0 4px 12px rgba(79, 172, 254, 0.4);
+    transform: translateY(-2px);
+}
+
+.button-group {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+}
+
+.cancel-btn {
+    padding: 12px 24px;
+    background: #6c757d;
+    color: white;
+    border: none;
+    border-radius: 10px;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.cancel-btn:hover {
+    background: #5a6268;
+    box-shadow: 0 5px 15px rgba(108, 117, 125, 0.3);
     transform: translateY(-2px);
 }
 

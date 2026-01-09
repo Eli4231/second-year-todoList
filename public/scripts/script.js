@@ -1,22 +1,32 @@
+console.log('script.js loaded successfully!');
+
 let categories = [];
 let tasks = [];
-let selectedCategoryId = null;
+let editingTaskId = null; // null = adding new task, number = editing existing task
 
 async function loadUserGreeting() {
     try {
+        console.log('Loading user greeting...');
         let response = await fetch('/users/me', {
             credentials: 'include'
         });
         
+        console.log('User response status:', response.status);
+        
         if (response.status === 200) {
             let data = await response.json();
+            console.log('User data:', data);
             let userName = data.user.name || data.user.useName || 'User';
             let title = document.getElementById('title');
             title.innerHTML = `שלום ${userName}`;
             
             // Load categories and tasks after user is loaded
+            console.log('Loading categories...');
             await loadCategories();
+            console.log('Loading tasks...');
             await loadTasks();
+            console.log('Categories:', categories);
+            console.log('Tasks:', tasks);
         } else {
             window.location.href = '/';
         }
@@ -34,13 +44,13 @@ async function loadCategories() {
         
         if (response.status === 200) {
             let data = await response.json();
+            // Handle both cases: when categories exist and when they don't
             if (data.message === "no categories found") {
                 categories = [];
             } else {
                 categories = data.categories || [];
             }
             populateCategorySelect();
-            populateFilterCategorySelect();
         }
     } catch (error) {
         console.error('Error loading categories:', error);
@@ -59,24 +69,6 @@ function populateCategorySelect() {
     });
 }
 
-function populateFilterCategorySelect() {
-    const select = document.getElementById('filterCategory');
-    select.innerHTML = '<option value="">בחר קטגוריה...</option>';
-    
-    categories.forEach(category => {
-        const option = document.createElement('option');
-        option.value = category.id;
-        option.textContent = category.name;
-        select.appendChild(option);
-    });
-    
-    // Auto-select first category if available
-    if (categories.length > 0) {
-        selectedCategoryId = categories[0].id;
-        select.value = selectedCategoryId;
-    }
-}
-
 async function loadTasks() {
     try {
         let response = await fetch('/tasks', {
@@ -85,6 +77,7 @@ async function loadTasks() {
         
         if (response.status === 200) {
             let data = await response.json();
+            // Handle both cases: when tasks exist and when they don't
             if (data.message === "no tasks found") {
                 tasks = [];
             } else {
@@ -98,32 +91,25 @@ async function loadTasks() {
 }
 
 function displayTasksInTable() {
+    console.log('Displaying tasks in table. Tasks count:', tasks.length);
     const tbody = document.getElementById('tasksTableBody');
     const noTasksMsg = document.getElementById('noTasksMessage');
     const table = document.getElementById('tasksTable');
     
     tbody.innerHTML = '';
 
-    // Filter tasks by selected category
-    const filteredTasks = selectedCategoryId 
-        ? tasks.filter(task => task.category_id == selectedCategoryId)
-        : tasks;
-
-    if (filteredTasks.length === 0) {
+    if (tasks.length === 0) {
+        console.log('No tasks found, showing message');
         table.style.display = 'none';
         noTasksMsg.style.display = 'block';
-        if (selectedCategoryId) {
-            noTasksMsg.textContent = 'אין משימות בקטגוריה זו.';
-        } else {
-            noTasksMsg.textContent = 'אין משימות עדיין. המשימות שלך יופיעו כאן.';
-        }
         return;
     }
 
+    console.log('Displaying', tasks.length, 'tasks');
     table.style.display = 'table';
     noTasksMsg.style.display = 'none';
 
-    filteredTasks.forEach(task => {
+    tasks.forEach(task => {
         const row = document.createElement('tr');
         row.className = task.isDone ? 'completed-task' : '';
         
@@ -143,12 +129,49 @@ function displayTasksInTable() {
                 <span class="category-badge">${categoryName}</span>
             </td>
             <td class="actions-cell">
+                <button class="edit-btn-small" onclick="editTask(${task.id})">ערוך</button>
                 <button class="delete-btn-small" onclick="deleteTask(${task.id})">מחק</button>
             </td>
         `;
         
         tbody.appendChild(row);
     });
+}
+
+function editTask(taskId) {
+    const task = tasks.find(t => t.id === taskId);
+    if (!task) return;
+
+    // Fill the form with task data
+    document.getElementById('taskDescription').value = task.description;
+    document.getElementById('taskCategory').value = task.category_id;
+    
+    // Update the button text
+    const submitBtn = document.getElementById('submitTaskBtn');
+    const cancelBtn = document.getElementById('cancelEditBtn');
+    submitBtn.textContent = 'עדכן משימה';
+    cancelBtn.style.display = 'inline-block';
+    
+    // Store which task we're editing
+    editingTaskId = taskId;
+    
+    // Scroll to the form
+    document.querySelector('.add-task-section').scrollIntoView({ behavior: 'smooth' });
+}
+
+function cancelEdit() {
+    // Clear the form
+    document.getElementById('taskDescription').value = '';
+    document.getElementById('taskCategory').value = '';
+    
+    // Reset the button text
+    const submitBtn = document.getElementById('submitTaskBtn');
+    const cancelBtn = document.getElementById('cancelEditBtn');
+    submitBtn.textContent = 'הוסף משימה';
+    cancelBtn.style.display = 'none';
+    
+    // Clear editing state
+    editingTaskId = null;
 }
 
 async function addTask() {
@@ -166,30 +189,50 @@ async function addTask() {
     }
 
     try {
-        let response = await fetch('/tasks', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            credentials: 'include',
-            body: JSON.stringify({
-                description: description.trim(),
-                isDone: 0,
-                category_id: parseInt(categoryId)
-            })
-        });
+        let response;
+        
+        if (editingTaskId) {
+            // Update existing task
+            const task = tasks.find(t => t.id === editingTaskId);
+            response = await fetch(`/tasks/${editingTaskId}`, {
+                method: 'PATCH',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                credentials: 'include',
+                body: JSON.stringify({
+                    description: description.trim(),
+                    isDone: task.isDone,
+                    category_id: parseInt(categoryId)
+                })
+            });
+        } else {
+            // Add new task
+            response = await fetch('/tasks', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                credentials: 'include',
+                body: JSON.stringify({
+                    description: description.trim(),
+                    isDone: 0,
+                    category_id: parseInt(categoryId)
+                })
+            });
+        }
 
         let data = await response.json();
         if (response.status === 200) {
-            document.getElementById('taskDescription').value = '';
+            cancelEdit(); // Reset form
             await loadTasks();
-            alert('המשימה נוספה בהצלחה!');
+            alert(editingTaskId ? 'המשימה עודכנה בהצלחה!' : 'המשימה נוספה בהצלחה!');
         } else {
-            alert(data.message || 'שגיאה בהוספת המשימה');
+            alert(data.message || 'שגיאה בשמירת המשימה');
         }
     } catch (error) {
-        console.error('Error adding task:', error);
-        alert('שגיאה בהוספת המשימה');
+        console.error('Error saving task:', error);
+        alert('שגיאה בשמירת המשימה');
     }
 }
 
@@ -279,11 +322,6 @@ async function addCategory() {
         console.error('Error adding category:', error);
         alert('שגיאה בהוספת הקטגוריה');
     }
-}
-
-function filterTasksByCategory(categoryId) {
-    selectedCategoryId = categoryId ? parseInt(categoryId) : null;
-    displayTasksInTable();
 }
 
 async function logout() {
