@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ניהול משתמשים</title>
+    <link rel="stylesheet" href="../styles/styles.css">
+</head>
+<body>
+    <div class="container">
+        <div class="header-section">
+            <h1>ניהול משתמשים</h1>
+            <button class="back-btn" onclick="window.location.href='/home'">חזרה לדף הבית</button>
+        </div>
+
+        <!-- Users Table -->
+        <div class="users-section">
+            <h2>רשימת משתמשים</h2>
+            <div id="usersTableContainer">
+                <table id="usersTable">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>שם משתמש</th>
+                            <th>שם מלא</th>
+                            <th>פעולות</th>
+                        </tr>
+                    </thead>
+                    <tbody id="usersTableBody">
+                        <!-- Users will be inserted here by JavaScript -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Add/Edit User Form -->
+        <div class="add-user-section">
+            <h2 id="formTitle">הוסף משתמש חדש</h2>
+            <div class="form-group">
+                <label for="userName">שם משתמש</label>
+                <input type="text" id="userName" placeholder="הכנס שם משתמש">
+            </div>
+            <div class="form-group">
+                <label for="fullName">שם מלא</label>
+                <input type="text" id="fullName" placeholder="הכנס שם מלא">
+            </div>
+            <div class="form-group">
+                <label for="userPassword">סיסמה</label>
+                <input type="password" id="userPassword" placeholder="הכנס סיסמה">
+            </div>
+            <div class="button-group">
+                <button id="submitUserBtn" onclick="addUser()">הוסף משתמש</button>
+                <button id="cancelEditBtn" onclick="cancelEdit()" style="display: none;" class="cancel-btn">ביטול</button>
+            </div>
+        </div>
+    </div>
+    
+    <script src="../scripts/manage-users.js"></script>
+</body>
+</html>
+
