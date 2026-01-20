@@ -177,29 +177,6 @@ a:hover {
     color: #333;
 }
 
-/* Filter Section */
-.filter-section {
-    margin-bottom: 20px;
-    padding: 15px 20px;
-    background: #f0f4ff;
-    border-radius: 10px;
-    display: flex;
-    align-items: center;
-    gap: 15px;
-}
-
-.filter-section label {
-    font-weight: 600;
-    color: #555;
-    margin-bottom: 0;
-    white-space: nowrap;
-}
-
-.filter-section select {
-    flex: 1;
-    max-width: 300px;
-}
-
 #tasksTableContainer {
     background: white;
     border-radius: 15px;
@@ -410,6 +387,65 @@ select:focus {
     box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
 }
 
+/* Admin Links Section */
+.admin-links-section {
+    margin-bottom: 30px;
+    padding: 20px;
+    background: linear-gradient(135deg, #e0f7fa 0%, #e1bee7 100%);
+    border-radius: 15px;
+}
+
+.admin-links-section h2 {
+    margin-bottom: 15px;
+    color: #333;
+    font-size: 1.2rem;
+    text-align: center;
+}
+
+.admin-links {
+    display: flex;
+    gap: 15px;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+.admin-link {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 15px 25px;
+    background: white;
+    border-radius: 12px;
+    text-decoration: none;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    min-width: 200px;
+    justify-content: center;
+}
+
+.admin-link:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+}
+
+.users-link {
+    border-right: 4px solid #667eea;
+}
+
+.categories-link {
+    border-right: 4px solid #fa709a;
+}
+
+.link-icon {
+    font-size: 1.5rem;
+}
+
+.link-text {
+    font-weight: 600;
+    font-size: 1rem;
+    color: #333;
+}
+
 /* Responsive design */
 @media (max-width: 768px) {
     .header-section {
@@ -420,6 +456,14 @@ select:focus {
     
     .logout-btn {
         max-width: 100%;
+    }
+    
+    .admin-links {
+        flex-direction: column;
+    }
+    
+    .admin-link {
+        width: 100%;
     }
     
     #tasksTable {
