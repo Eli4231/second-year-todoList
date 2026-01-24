@@ -40,7 +40,7 @@ function displayUsersInTable() {
     tbody.innerHTML = '';
 
     if (users.length === 0) {
-        tbody.innerHTML = '<tr><td colspan="4" style="text-align: center;">אין משתמשים במערכת</td></tr>';
+        tbody.innerHTML = '<tr><td colspan="5" style="text-align: center;">אין משתמשים במערכת</td></tr>';
         return;
     }
 
@@ -50,6 +50,7 @@ function displayUsersInTable() {
             <td>${user.id}</td>
             <td>${user.userName}</td>
             <td>${user.fullname}</td>
+            <td>${user.email}</td>
             <td class="actions-cell">
                 <button class="edit-btn-small" onclick="editUser(${user.id})">ערוך</button>
                 <button class="delete-btn-small" onclick="deleteUser(${user.id})">מחק</button>
@@ -65,6 +66,7 @@ function editUser(userId) {
 
     document.getElementById('userName').value = user.userName;
     document.getElementById('fullName').value = user.fullname;
+    document.getElementById('userEmail').value = user.email;
     document.getElementById('userPassword').value = ''; // Don't show password
     
     const formTitle = document.getElementById('formTitle');
@@ -83,6 +85,7 @@ function editUser(userId) {
 function cancelEdit() {
     document.getElementById('userName').value = '';
     document.getElementById('fullName').value = '';
+    document.getElementById('userEmail').value = '';
     document.getElementById('userPassword').value = '';
     
     const formTitle = document.getElementById('formTitle');
@@ -99,9 +102,10 @@ function cancelEdit() {
 async function addUser() {
     const userName = document.getElementById('userName').value;
     const fullName = document.getElementById('fullName').value;
+    const email = document.getElementById('userEmail').value;
     const password = document.getElementById('userPassword').value;
 
-    if (!userName.trim() || !fullName.trim()) {
+    if (!userName.trim() || !fullName.trim() || !email.trim()) {
         alert('אנא מלא את כל השדות החובה');
         return;
     }
@@ -118,7 +122,8 @@ async function addUser() {
             // Update existing user
             const body = {
                 userName: userName.trim(),
-                fullname: fullName.trim()
+                fullname: fullName.trim(),
+                email: email.trim()
             };
             
             // Only include password if provided
@@ -145,6 +150,7 @@ async function addUser() {
                 body: JSON.stringify({
                     userName: userName.trim(),
                     fullname: fullName.trim(),
+                    email: email.trim(),
                     pass: password.trim()
                 })
             });
@@ -190,4 +196,3 @@ async function deleteUser(userId) {
         alert('שגיאה במחיקת המשתמש');
     }
 }
-

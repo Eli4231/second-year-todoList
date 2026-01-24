@@ -1,13 +1,13 @@
 const db = require('../config/db_config');
 
 async function getAllUsersFromDB(){
-    const sql = 'SELECT id,name,email,useName FROM users';
+    const sql = 'SELECT id, name as fullname, email, useName as userName FROM users';
     const [rows] = await db.query(sql);
     return rows;
 }
 
 async function getUserByIdFromDB(id){
-    const sql = 'SELECT id,name,email,useName FROM users WHERE id = ?';
+    const sql = 'SELECT id, name as fullname, email, useName as userName FROM users WHERE id = ?';
     const [rows] = await db.query(sql, [id]);
     return rows;
 }
