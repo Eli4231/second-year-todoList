@@ -16,7 +16,6 @@ app.use(cookieParser());
 
 
 app.use('/', require('./routes/pages_R.js'));
-app.use('/auth', require('./routes/pages_R.js'));
 app.use('/tasks', require('./routes/tasks_R'));
 app.use('/users', require('./routes/users_R'));
 app.use('/categories', require('./routes/categories_R'));

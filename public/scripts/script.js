@@ -16,7 +16,7 @@ async function loadUserGreeting() {
         if (response.status === 200) {
             let data = await response.json();
             console.log('User data:', data);
-            let userName = data.user.name || data.user.useName || 'User';
+            let userName = data.user.fullname || data.user.userName || 'User';
             let title = document.getElementById('title');
             title.innerHTML = `שלום ${userName}`;
             
