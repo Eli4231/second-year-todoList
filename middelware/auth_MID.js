@@ -91,4 +91,37 @@ function isLoggedIn(req, res, next) {
     }
 }
 
-module.exports = { valuesToRegister, encryptPassword, login, verifyCredentials, isLoggedIn };
+function isLoggedInPage(req, res, next) {
+    let token = req.cookies?.jwt;
+
+    if (!token) {
+        const authHeader = req.headers?.authorization || req.headers?.Authorization;
+        if (authHeader) {
+            token = authHeader.startsWith('Bearer ')
+                ? authHeader.replace(/^Bearer\s+/i, '').trim()
+                : authHeader.trim();
+        }
+    }
+
+    if (!token) {
+        token = req.headers?.['x-access-token'] || req.headers?.['X-Access-Token'];
+        if (token) {
+            token = token.trim();
+        }
+    }
+
+    if (!token) {
+        return res.redirect('/');
+    }
+
+    try {
+        const decoded = jwt.verify(token, process.env.SECRET_KEY || 'dev_secret');
+        req.user = decoded;
+        next();
+    }
+    catch (error) {
+        return res.redirect('/');
+    }
+}
+
+module.exports = { valuesToRegister, encryptPassword, login, verifyCredentials, isLoggedIn, isLoggedInPage };
