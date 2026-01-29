@@ -17,6 +17,10 @@ router.get('/manage-users', (req, res) => {
     res.sendFile(path.join(__dirname,"..","public","pages","manage-users.html"));
 });
 
+router.get('/manage-categories', (req, res) => {
+    res.sendFile(path.join(__dirname,"..","public","pages","manage-categories.html"));
+});
+
 router.get('/test', (req, res) => {
     res.sendFile(path.join(__dirname,"..","public","pages","test.html"));
 });

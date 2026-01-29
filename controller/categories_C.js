@@ -34,9 +34,17 @@ async function getCategoryById(req, res) {
 async function deleteCategory(req, res) {
     try {
         const user_id = req.user.id;
-        const affectedRows = await deleteCategoryFromDB(req.params.id, user_id);
+        const category_id = req.params.id;
+        const db = require('../config/db_config');
+        
+        // First, delete all tasks associated with this category
+        const deleteTasksSql = 'DELETE FROM tasks WHERE category_id = ? AND user_id = ?';
+        await db.query(deleteTasksSql, [category_id, user_id]);
+        
+        // Then delete the category
+        const affectedRows = await deleteCategoryFromDB(category_id, user_id);
         if (!affectedRows || affectedRows === 0) {
-            res.status(404).json({ message: `category id ${req.params.id} not found` });
+            res.status(404).json({ message: `category id ${category_id} not found` });
             return;
         }
         res.status(200).json({ message: "category deleted successfully" });

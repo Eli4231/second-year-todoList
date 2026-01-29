@@ -493,3 +493,68 @@ select:focus {
         font-size: 2rem;
     }
 }
+
+/* Manage Categories Page Specific Styles */
+.categories-section table {
+    width: 100%;
+}
+
+.categories-section td {
+    text-align: right;
+}
+
+.categories-section td:first-child {
+    text-align: center;
+    font-weight: 600;
+    color: #667eea;
+}
+
+.back-btn {
+    max-width: 200px;
+    padding: 10px 20px;
+    font-size: 0.9rem;
+    background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+    margin: 0;
+}
+
+.back-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(79, 172, 254, 0.5);
+}
+
+#categoriesTableContainer {
+    background: white;
+    border-radius: 15px;
+    overflow: hidden;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+}
+
+#categoriesTable {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+#categoriesTable thead {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+}
+
+#categoriesTable th {
+    padding: 15px;
+    text-align: right;
+    font-weight: 600;
+    font-size: 1rem;
+}
+
+#categoriesTable td {
+    padding: 15px;
+    border-bottom: 1px solid #e0e0e0;
+}
+
+#categoriesTable tbody tr {
+    transition: background-color 0.3s ease;
+}
+
+#categoriesTable tbody tr:hover {
+    background-color: #f8f9fa;
+}
